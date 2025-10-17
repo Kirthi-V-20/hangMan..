@@ -3,22 +3,27 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"math/rand"
 	"os"
+	"strings"
 )
 
 func getSecretWord(wordFileName string) string {
+	allowedWords := []string{}
 	file, err := os.Open(wordFileName)
 	if err != nil {
-		panic(fmt.Sprintf("The file could not be opened: %v", err))
+		fmt.Errorf("The file could not open:%v", err)
 	}
 	defer file.Close()
-
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		fmt.Println(scanner.Text())
+		word := scanner.Text()
+		if word == strings.ToLower(word) {
+			allowedWords = append(allowedWords, word)
+		}
 	}
-
-	return "Hii"
+	randomNum := rand.Intn(len(allowedWords))
+	return allowedWords[randomNum]
 }
 func main() {
 	fmt.Println(getSecretWord("/usr/share/dict/words"))
