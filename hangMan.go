@@ -18,7 +18,7 @@ func getSecretWord(wordFileName string) string {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		word := scanner.Text()
-		if word == strings.ToLower(word) {
+		if word == strings.ToLower(word) && len(word) >= 6 {
 			allowedWords = append(allowedWords, word)
 		}
 	}
