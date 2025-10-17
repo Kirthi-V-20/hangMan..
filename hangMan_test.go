@@ -48,3 +48,28 @@ func TestSecretWordNopunctuation(t *testing.T) {
 		t.Errorf("Should not get words with punctuations. Got %s", secretWord)
 	}
 }
+
+func TestCorrectGuess(t *testing.T) {
+	SecretWord := "pineapple"
+	currentState := NewHangMan(SecretWord)
+	user_Input := byte('l')
+	newState := checkGuess(currentState, byte(user_Input))
+	expected := HangMan{
+		SecretWord:       SecretWord,
+		Guesses:          append(currentState.Guesses, byte(user_Input)),
+		ChancesRemaining: 7,
+		CorrectGuesses:   append(currentState.CorrectGuesses, byte(user_Input)),
+	}
+	if newState.SecretWord != expected.SecretWord {
+		t.Errorf("Secreat word is modified\n")
+	}
+	if string(newState.Guesses) != string(expected.Guesses) {
+		t.Errorf("Guess should be [l] but got %v\n", newState.Guesses)
+	}
+	if string(newState.CorrectGuesses) != string(expected.CorrectGuesses) {
+		t.Errorf("Guess should be [l] but got %v", newState.CorrectGuesses)
+	}
+	if newState.ChancesRemaining != expected.ChancesRemaining {
+		t.Errorf("Chances left modified!\n")
+	}
+}
