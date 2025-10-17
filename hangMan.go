@@ -9,6 +9,22 @@ import (
 	"unicode"
 )
 
+type HangMan struct {
+	SecretWord       string
+	Guesses          []byte
+	ChancesRemaining uint
+	CorrectGuesses   []byte
+}
+
+func NewHangMan(secretWord string) HangMan {
+	return HangMan{
+		SecretWord:       secretWord,
+		Guesses:          []byte{},
+		ChancesRemaining: 7,
+		CorrectGuesses:   []byte{},
+	}
+}
+
 func isAllLetters(s string) bool {
 	for _, r := range s {
 		if !unicode.IsLetter(r) {
@@ -36,6 +52,10 @@ func getSecretWord(wordFileName string) string {
 	}
 	randomNum := rand.Intn(len(allowedWords))
 	return allowedWords[randomNum]
+}
+
+func checkGuess(currentState HangMan, userInput byte) HangMan {
+	return currentState
 }
 func main() {
 	fmt.Println(getSecretWord("/usr/share/dict/words"))
