@@ -128,3 +128,33 @@ func TestWrongGuess(t *testing.T) {
 		t.Errorf("Chances left not decremented\n")
 	}
 }
+
+func TestWrongGuess1(t *testing.T) {
+	secretWord := "pineapple"
+	currentState := HangMan{
+		SecretWord:       secretWord,
+		Guesses:          []byte{'x', 'y'},
+		ChancesRemaining: 5,
+		CorrectGuesses:   []byte{'t'},
+	}
+	user_Input := byte('f')
+	newState := checkGuess(currentState, byte(user_Input))
+	expected := HangMan{
+		SecretWord:       secretWord,
+		Guesses:          append(currentState.Guesses, byte(user_Input)),
+		ChancesRemaining: currentState.ChancesRemaining - 1,
+		CorrectGuesses:   currentState.CorrectGuesses,
+	}
+	if newState.SecretWord != expected.SecretWord {
+		t.Errorf("Secreat word is modified\n")
+	}
+	if string(newState.Guesses) != string(expected.Guesses) {
+		t.Errorf("Guess should be [a] but got %v\n", newState.Guesses)
+	}
+	if string(newState.CorrectGuesses) != string(expected.CorrectGuesses) {
+		t.Errorf("Guess should be [a] but got %v", newState.CorrectGuesses)
+	}
+	if newState.ChancesRemaining != expected.ChancesRemaining {
+		t.Errorf("Chances left not decremented\n")
+	}
+}
