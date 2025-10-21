@@ -94,6 +94,20 @@ func checkWon(game HangMan) bool {
 	return true
 }
 
+func displayWord(state HangMan) string {
+	display := ""
+
+	for _, ch := range state.SecretWord {
+		if bytes.Contains(state.CorrectGuesses, []byte{byte(ch)}) {
+			display += string(ch) + " "
+		} else {
+			display += "_ "
+		}
+	}
+
+	return strings.TrimSpace(display)
+}
+
 func main() {
 	fmt.Println(getSecretWord("/usr/share/dict/words"))
 }
