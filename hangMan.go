@@ -58,15 +58,20 @@ func getSecretWord(wordFileName string) string {
 func checkGuess(currentState HangMan, user_Input byte) HangMan {
 	isContainletter := strings.ContainsRune(currentState.SecretWord, rune(user_Input))
 	isAlreadyGuessed := bytes.Contains(currentState.Guesses, []byte{user_Input})
-	if currentState.ChancesRemaining > 0 && isContainletter && !isAlreadyGuessed {
+	if isAlreadyGuessed {
+		fmt.Printf("You already guessed '%c'!\n", user_Input)
+		return currentState
+	}
+
+	if currentState.ChancesRemaining > 0 && isContainletter {
 		currentState = HangMan{
 			SecretWord:       currentState.SecretWord,
 			Guesses:          append(currentState.Guesses, user_Input),
 			CorrectGuesses:   append(currentState.CorrectGuesses, user_Input),
 			ChancesRemaining: currentState.ChancesRemaining,
 		}
-	}
-	if currentState.ChancesRemaining > 0 && !isContainletter && !isAlreadyGuessed {
+
+	} else if currentState.ChancesRemaining > 0 && !isContainletter {
 		currentState = HangMan{
 			SecretWord:       currentState.SecretWord,
 			Guesses:          append(currentState.Guesses, user_Input),
@@ -78,11 +83,25 @@ func checkGuess(currentState HangMan, user_Input byte) HangMan {
 }
 
 func getUserInput(s string) byte {
-	fmt.Print(s)
 	reader := bufio.NewReader(os.Stdin)
-	letter, _ := reader.ReadByte()
-	reader.ReadByte()
-	return letter
+	for {
+		fmt.Print(s)
+		input, _ := reader.ReadString('\n')
+		input = strings.TrimSpace(input)
+
+		if len(input) != 1 {
+			fmt.Println("Please enter only a single letter")
+			continue
+		}
+
+		letter := rune(input[0])
+
+		if !unicode.IsLetter(letter) {
+			fmt.Println("Please enter a letter (A-Z or a-z)")
+			continue
+		}
+		return byte(unicode.ToLower(letter))
+	}
 }
 
 func checkWon(game HangMan) bool {
@@ -109,10 +128,8 @@ func displayWord(state HangMan) string {
 }
 
 func checkLose(game HangMan) bool {
-	if game.ChancesRemaining <= 0 {
-		return true
-	}
-	return false
+	return game.ChancesRemaining <= 0
+
 }
 
 func main() {
