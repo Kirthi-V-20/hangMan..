@@ -222,3 +222,17 @@ func TestDisplayWord(t *testing.T) {
 		t.Errorf("Expected %s, got %s", expected, result)
 	}
 }
+
+func TestDisplayWord1(t *testing.T) {
+	state := HangMan{
+		SecretWord:       "pineapple",
+		CorrectGuesses:   []byte{'p', 'e'},
+		Guesses:          []byte{'p', 'e'},
+		ChancesRemaining: 7,
+	}
+	expected := "p _ _ e _ p p _ e"
+	result := displayWord(state)
+	if result != expected {
+		t.Errorf("Expected %s, got %s", expected, result)
+	}
+}
