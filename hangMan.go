@@ -108,6 +108,13 @@ func displayWord(state HangMan) string {
 	return strings.TrimSpace(display)
 }
 
+func checkLose(game HangMan) bool {
+	if game.ChancesRemaining <= 0 {
+		return true
+	}
+	return false
+}
+
 func main() {
 	secretWord := getSecretWord("/usr/share/dict/words")
 	game := NewHangMan(secretWord)
